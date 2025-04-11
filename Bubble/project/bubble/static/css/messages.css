@@ -1,0 +1,63 @@
+.chat-container {
+    background-color: #1A1A1A;
+    height: 300px;
+    width: 100%;
+    overflow-y: auto;
+
+
+}
+
+.request_user {
+    color: #2ECC71;
+    text-align: right;
+    margin-left: auto;
+    padding: 3px;
+    word-break: break-word;}
+
+.respond_user {
+    color: #E6E6FA;
+    text-align: left;
+    word-break: break-word;
+}
+.time_stamp {
+    text-align: right;
+    color:#E74C3C;
+    opacity: 0.6;
+
+}
+.time_stamp_response{
+    text-align: left;
+    color:#E74C3C;
+    opacity: 0.6;
+}
+button.red{
+    margin-inline: 15px;
+    color: #E6E6FA;
+    text-decoration: none;
+    display: inline-block;
+    background-color: #E74C3C;
+    padding: 15px;
+    padding-bottom: 10px;
+    padding-top: 10px
+}
+
+.MsgInput{
+    color:#E6E6FA;
+    position:  relative;
+    left:  450px;
+    top: 100px;
+    background-color: #1A1A1A;
+    border-color:#2ECC71;
+    border-radius: 20px;
+    min-height: 50px;
+    width: 300px;
+}
+
+.SendButton{
+    position: relative;
+    left: 450px;
+    top: 100px;
+    background-color:#E6E6FA;
+    
+}
+

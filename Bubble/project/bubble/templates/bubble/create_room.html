@@ -1,0 +1,27 @@
+<html>
+{% extends 'base.html'%}%%
+{% load static %}
+    <head>
+        <style>
+            .body{overflow-y}
+            .form{overflow-y} 
+        </style>
+        <h1>
+            Create your room here
+        </h1>
+    </head>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    {% endblock %}
+    {% block content %}
+    <Body id="body">
+        <form id="form" method = "POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+    <button type = "submit">save</button>
+        </form>
+    {% endblock %}
+
+</Body>
+
+</html>

@@ -1,0 +1,22 @@
+form {
+    position: absolute;
+    top: 10%;
+    left: 22%;
+    background-color: #1A1A1A;
+    padding: 30px;
+    border-radius: 10px;
+    color: #E6E6FA;
+    width: 50%;
+    text-align: center;
+}
+
+button {
+    position: relative;
+    right: 15%;
+    background-color: #2ECC71;
+    color: #E6E6FA;
+}
+
+button:hover{
+    background-color: #20854a;
+}

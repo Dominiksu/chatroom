@@ -1,0 +1,116 @@
+
+
+{% extends 'base.html' %}
+
+   
+{% load static %}
+
+    {% block extra_css %} 
+
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+
+    {%endblock%}
+
+    
+ 
+{% block content %}
+
+
+<div class="chat-container"> 
+    <div id= "chat_messages">
+    {% for message in messages %}
+
+    {% if message.user == request.user %}
+
+        <div class = "request_user"> {{ request.user }}: {{ message.content }} </div>
+        <div class = "time_stamp"> {{message.create_dt}} </div>
+    {% else %}
+
+        <div class = "respond_user"> {{ message.user.username }}: {{ message.content }} </div>
+        <div class = "time_stamp_response"> {{message.create_dt}} </div>
+        {% endif %}
+
+        {% endfor %}
+
+       
+    </div>
+</div>
+
+</div>
+<form id= 'chat_input' method="post">
+    {% csrf_token %}
+    <input type="text" name="message" class= 'MsgInput' id='input'>
+    <button type= "submit" class = "SendButton"> send </button>
+</form>
+
+
+
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+<script type = 'text/javascript'> 
+    var pk = {{ room.pk }}
+    const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/Chatroom/" + pk + "/");
+
+    chatSocket.onopen = function(e) {
+        console.log('WebSocket connection established');
+    };
+    chatSocket.onclose = function(e) {
+        console.error('WebSocket connection NOT established');
+    };
+    chatSocket.onmessage = function(e){
+
+        let data = JSON.parse(e.data)
+        console.log('Data:', data) 
+
+        const messageElement = document.createElement("div")
+        const timestampElement = document.createElement("div")
+        const chatElement = document.createElement("div")
+        const messageSender = data.user
+        const messageUser = "{{ request.user.username }}";
+        const messageContent = data.message
+        const messageTimestamp = data.timestamp
+        console.log(data.message)
+
+        console.log('data:', data); 
+        console.log('Django username:', "{{ request.user.username }}"); 
+        
+        
+
+
+        if (messageSender === messageUser) {
+        messageElement.classList.add ("request_user");
+        messageElement.textContent = messageContent;
+        timestampElement.classList.add ("time_stamp");
+        timestampElement.textContent = messageTimestamp;
+        
+        chatElement.append(messageElement, timestampElement);
+
+        document.getElementById("chat_messages").appendChild(chatElement)}
+        else {
+        messageElement.classList.add("respond_user") 
+        messageElement.textContent = messageContent 
+        timestampElement.classList.add ("time_stamp_response");
+        timestampElement.textContent = messageTimestamp;
+        
+        chatElement.append(messageElement, timestampElement);
+
+        document.getElementById("chat_messages").appendChild(chatElement)}
+    }
+       
+    let form = document.getElementById('chat_input')
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        let message = e.target.message.value
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }))
+        form.reset()
+        })
+
+
+</script>
+{% endblock %}

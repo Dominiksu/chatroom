@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
+{% endblock %}
+ 
+{% block content %}
+<body>
+     <ul class = 'list'>
+        {% for room in rooms %}
+
+        <li>
+
+        <div class="listConent">
+        {% if room.image %} 
+            <a href="{{room.get_absolute_url}}" class="roomLink">  <img src="{{ room.image.url }}" alt="" loading="lazy"> <h2> {{room.name}} </h2></a>
+
+        {% else %}
+            <a href="{{room.get_absolute_url}}" class="roomLink"> <h2> {{room.name}} </h2></a>
+        {% endif %}
+
+        </div>
+        <div class= "roomAction">
+            {% if request.user == room.created_by %}
+            <a href="{{room.get_absolute_url_delete}}" class="deleteLink"><h3>delete</h3></a>
+        {% endif %}
+        </div>
+            
+
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+{% endblock %}
