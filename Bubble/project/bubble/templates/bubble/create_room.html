@@ -1,25 +1,19 @@
 <html>
-{% extends 'base.html'%}%%
+{% extends 'base.html'%}
 {% load static %}
-    <head>
-        <style>
-            .body{overflow-y}
-            .form{overflow-y} 
-        </style>
-        <h1>
-            Create your room here
-        </h1>
-    </head>
+{% load crispy_forms_tags %}
+{%block title%} <h1> Create your room  </h1> {% endblock %}
     {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
     {% endblock %}
     {% block content %}
-    <Body id="body">
+    <div class= "field">
         <form id="form" method = "POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-    <button type = "submit">save</button>
+        {{ form|crispy }}
+    <button type = "submit" class="button is-success">save</button>
         </form>
+    </div>
     {% endblock %}
 
 </Body>

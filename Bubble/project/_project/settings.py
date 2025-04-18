@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'daphne',
     'channels',
     'bubble',
+    'crispy_forms',
+    'crispy_bulma',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,3 +144,5 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer'
     }
 }
+
+CRISPY_TEMPLATE_PACK = 'bulma'

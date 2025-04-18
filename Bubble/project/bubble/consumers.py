@@ -4,6 +4,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import Chatroom, Messages
 from django.utils import timezone
+from django.utils.dateformat import format as django_format
+from django.utils.timezone import localtime
 
 
 class Myconsumer(AsyncWebsocketConsumer):
@@ -28,13 +30,14 @@ class Myconsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         timestamp = timezone.now()
-        timestamp_format = timestamp.strftime('%H:%M')
+        timestamp_before_format = localtime(timestamp)
+        timestamp_format = django_format(timestamp_before_format, "F j, Y, P")
+
 
         print('message:', message,
               'user:', user,
               'timestamp:', timestamp)
         
-        #najdi Chatroom podle pk
         room = await database_sync_to_async(Chatroom.objects.get)(pk = self.room_pk)
         Chatroom_content = Messages(
           content = message,
