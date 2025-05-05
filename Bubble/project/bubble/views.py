@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from bubble.models import Chatroom, Messages, User
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, TemplateView, View, DetailView
 from bubble.forms import Room_Form, User_creation, Log_in
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -26,15 +27,16 @@ def Chatroom_list(request):
 
 
 
-def Chatroom_detail(request, pk):
+'''def Chatroom_detail(request, pk):
+
     if request.user.is_authenticated:
         room = get_object_or_404(Chatroom, pk = pk)
         messages = Messages.objects.filter(chat_room = pk).all()
-        
+
         return render(request, 'bubble/Chatroom_detail.html', {"room":room, "messages": messages})
     else: 
         messages.warning(request, 'You cannot chat without being logged in')
-        return redirect('/Log-in')
+        return redirect('/Log-in')'''
 
 
 def create_chatroom(request):
@@ -60,6 +62,7 @@ def create_chatroom(request):
 
 
 def registration(request):
+ 
     if request.method == "POST":
         form = User_creation(request.POST)
         if form.is_valid():
@@ -103,3 +106,19 @@ class ChatRoomDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
+class ChatRoomDetailView(LoginRequiredMixin, DetailView):
+
+    model = Chatroom
+    template_name = "bubble/Chatroom_detail.html"
+    context_object_name = 'room'
+    paginate_by = 30
+
+    def get_context_data(self, **kwargs ):
+            context = super().get_context_data(**kwargs)
+            messages =  Messages.objects.filter(chat_room = self.object).all()
+            paginator = Paginator(messages , self.paginate_by)
+
+            messages_page = paginator.page(paginator.num_pages)
+
+            context['messages'] = messages_page
+            return context
