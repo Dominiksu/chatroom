@@ -111,14 +111,11 @@ class ChatRoomDetailView(LoginRequiredMixin, DetailView):
     model = Chatroom
     template_name = "bubble/Chatroom_detail.html"
     context_object_name = 'room'
-    paginate_by = 30
 
     def get_context_data(self, **kwargs ):
             context = super().get_context_data(**kwargs)
             messages =  Messages.objects.filter(chat_room = self.object).all()
-            paginator = Paginator(messages , self.paginate_by)
+            latest_messages = messages.order_by('create_dt')[:100]
 
-            messages_page = paginator.page(paginator.num_pages)
-
-            context['messages'] = messages_page
+            context['messages'] = latest_messages
             return context
